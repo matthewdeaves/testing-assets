@@ -1,0 +1,38 @@
+# Use Cake shell on the container with args
+cmscake() {
+    sudo docker compose exec php bin/cake "$@"
+}
+
+cmsexec() {
+    sudo docker compose exec php "$@"
+}
+
+alias cmssh='sudo docker compose exec -it php /bin/sh'
+alias test='cmsexec php vendor/bin/phpunit'
+alias testcov='cmsexec php vendor/bin/phpunit --coverage-text'
+alias testcovhtml='cmsexec php vendor/bin/phpunit --coverage-html webroot/coverage tests/TestCase/'
+alias cscheck='cmsexec php composer cs-check'
+alias csfix='cmsexec php composer cs-fix'
+alias sniff='cmsexec php vendor/bin/phpcs --standard=vendor/cakephp/cakephp-codesniffer/CakePHP src/ tests/'
+alias snifffix='cmsexec php vendor/bin/phpcbf'
+alias stan='cmsexec php vendor/bin/phpstan analyse src/'
+alias runworkers='cmsexec bin/cake queue worker --verbose'
+
+# Set permissions
+alias cperm='cmsexec chmod -R 777 tmp logs webroot'
+
+#quick bashrc edits
+alias nbash='nano ~/.bashrc'
+alias sbash='source ~/.bashrc'
+
+#Docker Aliases
+alias dnames='sudo docker container ls -a --format "{{.Names}}"'
+alias dprune='sudo docker system prune -a'
+
+#Useful to set  everything you you:you if running docker with sudo
+mine() {
+    local current_user=$(whoami)
+    local current_group=$(id -gn)
+    sudo chown -R "$current_user:$current_group" .
+    echo "Ownership set to $current_user:$current_group for current directory and subdirectories."
+}
